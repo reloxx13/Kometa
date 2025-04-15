@@ -401,11 +401,11 @@ class Library(ABC):
         for i, item in enumerate(items, 1):
             if isinstance(item, tuple):
                 logger.ghost(f"Processing: {i}/{len(items)}")
-                logger.updateConsoleTitle(f"Mapping {i}/{len(items)}")
+                logger.updateConsoleTitle(f"Mapping {i}/{len(items)} {self.name}")
                 key, guid = item
             else:
                 logger.ghost(f"Processing: {i}/{len(items)} {item.title}")
-                logger.updateConsoleTitle(f"Mapping {i}/{len(items)}")
+                logger.updateConsoleTitle(f"Mapping {i}/{len(items)} {self.name}")
                 key = item.ratingKey
                 guid = item.guid
             if key not in self.movie_rating_key_map and key not in self.show_rating_key_map:
