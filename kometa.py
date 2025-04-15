@@ -3,6 +3,9 @@ from collections import Counter
 from concurrent.futures import ProcessPoolExecutor
 from datetime import datetime
 from modules.logs import MyLogger
+if sys.platform == "win32":
+    import ctypes
+
 
 if sys.version_info[0] != 3 or sys.version_info[1] < 9:
     print("Python Version %s.%s.%s has been detected and is not supported. Kometa requires a minimum of Python 3.9.0." % (sys.version_info[0], sys.version_info[1], sys.version_info[2]))
@@ -136,6 +139,12 @@ for arg_key, arg_data in arguments.items():
     final_vars = [f"KOMETA_{arg_key.replace('-', '_').upper()}"] + [f"KOMETA_{a.replace('-', '_').upper()}" for a in temp_args if len(a) > 2]
     run_args[arg_key] = get_env(final_vars, getattr(args, arg_key.replace("-", "_")), arg_bool=arg_data["type"] == "bool", arg_int=arg_data["type"] == "int")
 
+
+logger = MyLogger("Kometa", default_dir, run_args["width"], run_args["divider"][0], run_args["ignore-ghost"],
+                  run_args["tests"] or run_args["debug"], run_args["trace"], run_args["log-requests"], run_args["log-filename-prepend"])
+
+logger.updateConsoleTitle(f"Booting Kometa")
+
 env_branch = get_env("BRANCH_NAME", "master")
 is_docker = get_env("KOMETA_DOCKER", False, arg_bool=True)
 is_linuxserver = get_env("KOMETA_LINUXSERVER", False, arg_bool=True)
@@ -214,8 +223,6 @@ elif not os.path.exists(os.path.join(default_dir, "config.yml")):
         sys.exit(1)
 
 
-logger = MyLogger("Kometa", default_dir, run_args["width"], run_args["divider"][0], run_args["ignore-ghost"],
-                  run_args["tests"] or run_args["debug"], run_args["trace"], run_args["log-requests"], run_args["log-filename-prepend"])
 
 from modules import util
 util.logger = logger
@@ -296,6 +303,8 @@ def process(attrs):
 
 def start(attrs):
     try:
+        logger.updateConsoleTitle(f"")
+
         logger.add_main_handler()
         logger.separator()
         logger.info("")
@@ -625,6 +634,7 @@ def run_libraries(config):
             continue
         library_status[library.name] = {}
         try:
+            logger.updateConsoleTitle(f"Processing {library.name}")
             #logger.add_library_handler(library.mapping_name)
             plexapi.server.TIMEOUT = library.timeout
             os.environ["PLEXAPI_PLEXAPI_TIMEOUT"] = str(library.timeout)
@@ -727,6 +737,7 @@ def run_libraries(config):
                 "overlays": all([not run_args[x] for x in ["tests", "collections-only", "operations-only", "playlists-only", "metadata-only"]]),
             }
             for run_type in library.run_order:
+                logger.updateConsoleTitle(f"{library.name} {run_type}")
                 if run_type == "collections" and runs[run_type]:
                     time_start = datetime.now()
                     for metadata in library.collection_files:
@@ -797,6 +808,7 @@ def run_collection(config, library, metadata, requested_collections):
     logger.info("")
     for mapping_name, collection_attrs in requested_collections.items():
         collection_start = datetime.now()
+        logger.updateConsoleTitle(f"{library.name} {mapping_name} collection ({collection_start})")
         if run_args["tests"] and ("test" not in collection_attrs or collection_attrs["test"] is not True):
             no_template_test = True
             if "template" in collection_attrs and collection_attrs["template"]:
@@ -988,6 +1000,12 @@ def run_playlists(config):
     for playlist_file in config.playlist_files:
         for mapping_name, playlist_attrs in playlist_file.playlists.items():
             playlist_start = datetime.now()
+            if "name_mapping" in playlist_attrs and playlist_attrs["name_mapping"]:
+                playlist_log_name, output_str = util.validate_filename(playlist_attrs["name_mapping"])
+            else:
+                playlist_log_name, output_str = util.validate_filename(mapping_name)
+
+            logger.updateConsoleTitle(f"{playlist_log_name} {mapping_name} playlist ({playlist_start})")
             if run_args["tests"] and ("test" not in playlist_attrs or playlist_attrs["test"] is not True):
                 no_template_test = True
                 if "template" in playlist_attrs and playlist_attrs["template"]:
@@ -1003,10 +1021,7 @@ def run_playlists(config):
                 if no_template_test:
                     continue
 
-            if "name_mapping" in playlist_attrs and playlist_attrs["name_mapping"]:
-                playlist_log_name, output_str = util.validate_filename(playlist_attrs["name_mapping"])
-            else:
-                playlist_log_name, output_str = util.validate_filename(mapping_name)
+
             #logger.add_playlist_handler(playlist_log_name)
             status[mapping_name] = {"status": "Unchanged", "errors": [], "added": 0, "unchanged": 0, "removed": 0, "radarr": 0, "sonarr": 0}
             server_name = None
@@ -1083,7 +1098,6 @@ def run_playlists(config):
                     status[mapping_name]["status"] = delete_status
 
                 if builder.do_missing and (len(builder.missing_movies) > 0 or len(builder.missing_shows) > 0):
-                    builder.is_playlist = True
                     radarr_add, sonarr_add = builder.run_missing()
                     stats["radarr"] += radarr_add
                     status[mapping_name]["radarr"] += radarr_add

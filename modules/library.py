@@ -1,3 +1,4 @@
+import ctypes
 import os, time
 from abc import ABC, abstractmethod
 from modules import util
@@ -388,6 +389,8 @@ class Library(ABC):
     def cache_items(self):
         logger.info("")
         logger.separator(f"Caching {self.name} Library Items", space=False, border=False)
+        logger.updateConsoleTitle(f"Caching {self.name} Library Items")
+
         logger.info("")
         items = self.get_all()
         for item in items:
@@ -398,9 +401,11 @@ class Library(ABC):
         for i, item in enumerate(items, 1):
             if isinstance(item, tuple):
                 logger.ghost(f"Processing: {i}/{len(items)}")
+                logger.updateConsoleTitle(f"Mapping {i}/{len(items)}")
                 key, guid = item
             else:
                 logger.ghost(f"Processing: {i}/{len(items)} {item.title}")
+                logger.updateConsoleTitle(f"Mapping {i}/{len(items)}")
                 key = item.ratingKey
                 guid = item.guid
             if key not in self.movie_rating_key_map and key not in self.show_rating_key_map:

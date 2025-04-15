@@ -306,3 +306,38 @@ class MyLogger:
             rv = (co.co_filename, f.f_lineno, co.co_name, sinfo)
             break
         return rv
+
+    def updateConsoleTitle(self, title):
+        #append - Kometa to the title if not empty
+        if not title:
+            title = "Kometa"
+        else:
+            title = f"{title} - Kometa"
+
+        if sys.platform == "win32":
+            import ctypes
+            ctypes.windll.kernel32.SetConsoleTitleW(title)
+        elif sys.platform == "linux" or sys.platform == "darwin":
+            sys.stdout.write(f"\x1b]2;{title}\x07")
+            sys.stdout.flush()
+        else:
+            self._logger.debug("Console title update not supported on this platform.")
+
+
+    def close(self):
+        if self.main_handler:
+            self._logger.removeHandler(self.main_handler)
+            self.main_handler.close()
+        for handler in self.library_handlers.values():
+            self._logger.removeHandler(handler)
+            handler.close()
+        for handler in self.collection_handlers.values():
+            for h in handler.values():
+                self._logger.removeHandler(h)
+                h.close()
+        for handler in self.playlist_handlers.values():
+            self._logger.removeHandler(handler)
+            handler.close()
+        if self.playlists_handler:
+            self._logger.removeHandler(self.playlists_handler)
+            self.playlists_handler.close()

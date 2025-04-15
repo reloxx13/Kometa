@@ -1,3 +1,4 @@
+import ctypes
 import os, plexapi, re, time
 from datetime import datetime, timedelta
 from modules import builder, util
@@ -622,6 +623,7 @@ class Plex(Library):
             results.extend(subresults)
             container_start += container_size
             logger.ghost(f"Loaded: {total_size if container_start > total_size else container_start}/{total_size}")
+            logger.updateConsoleTitle(f"Loaded {total_size if container_start > total_size else container_start}/{total_size} {self.name}")
 
         logger.info(f"Loaded {total_size} {builder_level.capitalize()}s")
         if builder_level in [None, "show", "artist", "movie"]:
