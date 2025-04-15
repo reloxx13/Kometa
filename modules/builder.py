@@ -3013,6 +3013,7 @@ class CollectionBuilder:
         final_return = True
         if self.filters and not self.details["only_filter_missing"]:
             logger.ghost(f"Filtering {display} {item.title}")
+            logger.updateConsoleTitle(f"Filtering {display} {self.library.name}")
             item = self.library.reload(item)
             final_return = False
             tmdb_item = None
