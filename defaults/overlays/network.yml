@@ -69,6 +69,10 @@ overlays:
     variables: { weight: 10}
     template: [name: standard, name: networks]
 
+  5:
+    variables: { weight: 10}
+    template: [name: standard, {name: networks, search: ["5", "Channel 5"]}]
+
   7mate:
     variables: { weight: 10}
     template: [name: standard, name: networks]
@@ -105,10 +109,6 @@ overlays:
     variables: { weight: 10}
     template: [name: standard, name: networks]
 
-  Alibi:
-    variables: { weight: 10}
-    template: [name: standard, name: networks]
-
   ALTBalaji:
     variables: { weight: 10}
     template: [name: standard, name: networks]
@@ -141,9 +141,9 @@ overlays:
     variables: { weight: 10}
     template: [name: standard, name: networks]
 
-  Apple TV+:
+  Apple TV:
     variables: { weight: 10}
-    template: [name: standard, name: networks]
+    template: [name: standard, {name: networks, search: [Apple TV, Apple TV+]}]
 
   ARD:
     variables: { weight: 10}
@@ -152,6 +152,10 @@ overlays:
   Arte:
     variables: { weight: 10}
     template: [name: standard, name: networks]
+
+  Atres Player:
+      variables: { weight: 10 }
+      template: [ name: standard, name: networks ]
 
   Atresplayer Premium:
     variables: { weight: 10}
@@ -281,10 +285,6 @@ overlays:
     variables: { weight: 10}
     template: [name: standard, name: networks]
 
-  Channel 5:
-    variables: { weight: 10}
-    template: [name: standard, name: networks]
-
   CHCH-DT:
     variables: { weight: 10}
     template: [name: standard, name: networks]
@@ -337,10 +337,6 @@ overlays:
     variables: { weight: 10}
     template: [name: standard, name: networks]
 
-  Dave:
-    variables: { weight: 10}
-    template: [name: standard, name: networks]
-
   DC Universe:
     variables: { weight: 10}
     template: [name: standard, name: networks]
@@ -378,10 +374,6 @@ overlays:
     template: [name: standard, name: networks]
     
   Dropout:
-    variables: { weight: 10}
-    template: [name: standard, name: networks]
-
-  Eden:
     variables: { weight: 10}
     template: [name: standard, name: networks]
 
@@ -496,6 +488,10 @@ overlays:
   HBO:
     variables: { weight: 10}
     template: [name: standard, {name: networks, search: [HBO, HBO Brasil, HBO Europe, HBO Asia, HBO Latin America, HBO España, HBO Nordic, HBO Canada, HBO Family, HBO Mundi]}]
+
+  HBO Max:
+    variables: {key: HBO Max, weight: 10}
+    template: [name: standard, {name: networks, search: [Max, HBO Go, HBO Max]}]
 
   HGTV:
     variables: { weight: 10}
@@ -628,10 +624,6 @@ overlays:
   MasterClass:
     variables: { weight: 10}
     template: [name: standard, name: networks]
-
-  Max:
-    variables: { weight: 10}
-    template: [name: standard, {name: networks, search: [Max, HBO Go, HBO Max]}]
 
   MBC:
     variables: { weight: 10}
@@ -965,6 +957,10 @@ overlays:
     variables: { weight: 10}
     template: [name: standard, name: networks]
 
+  tubi:
+    variables: { weight: 10}
+    template: [name: standard, name: networks]
+
   Turner Classic Movies:
     variables: { weight: 10}
     template: [name: standard, name: networks]
@@ -1025,7 +1021,35 @@ overlays:
     variables: { weight: 10}
     template: [name: standard, name: networks]
 
-  UKTV:
+  U:
+    variables: { weight: 10}
+    template: [name: standard, {name: networks, search: [UKTV, U]}]
+
+  "U&Alibi":
+    variables: { weight: 10}
+    template: [name: standard, {name: networks, search: ["U&Alibi", "Alibi"]}]
+
+  "U&Dave":
+    variables: { weight: 10}
+    template: [name: standard, {name: networks, search: ["U&Dave", "Dave"]}]
+
+  "U&Drama":
+    variables: { weight: 10}
+    template: [name: standard, name: networks]
+
+  "U&Eden":
+    variables: { weight: 10}
+    template: [name: standard, {name: networks, search: ["U&Eden", "Eden"]}]
+
+  "U&Gold":
+    variables: { weight: 10}
+    template: [name: standard, name: networks]
+
+  "U&W":
+    variables: { weight: 10}
+    template: [name: standard, name: networks]
+
+  "U&Yesterday":
     variables: { weight: 10}
     template: [name: standard, name: networks]
 

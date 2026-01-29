@@ -1,25 +1,39 @@
-# Requirements Update (requirements will need to be reinstalled)
-Update pillow requirement to 11.2.1
-Update plexapi requirement from 4.16.1 to 4.17.0
-Update lxml requirement to 5.4.0
-Update setuptools requirement to 80.3.1
-Update tenacity requirement to 9.1.2
-
 # Important Changes
+Python 3.9 is no longer supported as it is End-of-Life, please use Python 3.10+
+
+# Requirements Update (requirements will need to be reinstalled)
+Updated gitpython requirement to 3.1.46
+Updated pillow requirement to 12.1.0
+Updated plexapi requirement to 4.17.2
+Updated psutil requirement to 7.2.1
+Updated python-dotenv requirement to 1.2.1
+Updated ruamel.yaml requirement to 0.19.1
 
 # New Features
-Added `file_logo` and `url_logo` as metadata image options **credit to @Joost1991**
-Added support for `dovi` search attribute for Plex builders (requires PMS 1.41.6.9606 or above)
+Adds `|` as a preferred delimiter for run times.
+Adds an optional setting `plex_bulk_edit_batch_size` in operations to control how many items are processed in a single batch.
+Adds new filters `show_title` and `season_title`
+Adds Producer's Cut to resolution/edition default overlay
+Adds incremental parsing support to Letterboxd `user_films` and `user_reviews` builders for improved performance with large collections
+Change MDBList module to use API rather than JSON endpoint.
+Add visible (X/Y) logging while processing missing items.
+Add new `mal_all` genre option to include Explicit Genres, Themes and Demographics.
+Add new networks 'U&Drama', 'U&Gold', 'U&W' and 'U&Yesterday'
+Add new networks overlays 'U&Drama', 'U&Gold', 'U&W' and 'U&Yesterday'
+IMDB "Document is empty" no longer CRITICAL
 
 # Docs
-Adds overlay guide
+Add docs around requirements for those lists
+Sync MDBList sort options with MDBList API Docs
+Add docs around Plex token types, add Plex Token generation form
 
 # Defaults
-[Franchise] Updates 'NCIS' list to include NCIS: Origins and NCIS: Tony & Ziva. Adds 'Spartacus', 'Death in Paradise' and 'Reacher' to the franchise lists
 
 # Bug Fixes
-
-Fixed an issue where Playlists could not add to both Radarr and Sonarr in a single run
-Fixed an issue where `trakt_list_details` would not find a list's summary if it was an "official" Trakt list
-Fixed an issue where log file paths with >2 periods would cause a ValueError
-Fixed an issue with IMDb Awards
+Fix a logic error that caused an infinite loop on reauthentication with private Trakt Lists
+Pin dockerfile to 3.13.x, since 3.14.1 introduces memory bloat issues
+Improve API-based handling of MDBList "external" lists.
+Sync MDBList sort options with MDBList API Docs
+Update several networks to cater for updated names
+Adjust behavior of `mdb_commonsense` and `mdb_commonsense0` content rating operations to reflect current response from MDBList.
+Update networks to the current logos '5', 'U', 'U&Alibi', 'U&Dave' and 'U&Eden'

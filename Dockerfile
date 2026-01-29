@@ -1,8 +1,10 @@
-FROM python:3-slim
+FROM python:3.13-slim
 ARG BRANCH_NAME=master
 ENV BRANCH_NAME=${BRANCH_NAME}
 ENV TINI_VERSION=v0.19.0
 ENV KOMETA_DOCKER=True
+ENV LANG C.UTF-8
+ENV LC_ALL C.UTF-8
 COPY requirements.txt requirements.txt
 RUN echo "**** install system packages ****" \
  && apt-get update \
